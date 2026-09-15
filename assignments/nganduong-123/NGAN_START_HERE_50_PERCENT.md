@@ -2,9 +2,9 @@
 
 ## Repository chung
 
-- Repo private: `https://github.com/Clownnvd/K4-L3B-kingpro`
+- Repo private: `https://github.com/Clownnvd/K4-L3-DAY04-kingpro-PromptEngineeringToolCalling.git`
 - Branch của Ngân: `contrib/nganduong-123`
-- Nhóm: K4-L3B-kingpro, 2 người
+- Nhóm: K4-L3-DAY04-kingpro-PromptEngineeringToolCalling, 2 người
 - Tỷ lệ dự kiến: Nguyễn Văn Duy 50% · Dương Thị Ngân 50%
 
 ## Chia đôi phạm vi
@@ -30,14 +30,14 @@ Các file trong ZIP là **starter candidate** do trưởng nhóm/AI chuẩn bị
 
 ### 1. Chấp nhận lời mời GitHub
 
-Mở GitHub tài khoản `nganduong-123`, vào Notifications hoặc email và chấp nhận lời mời cộng tác repo `Clownnvd/K4-L3B`.
+Mở GitHub tài khoản `nganduong-123`, vào Notifications hoặc email và chấp nhận lời mời cộng tác repo `Clownnvd/K4-L3-DAY04-kingpro-PromptEngineeringToolCalling`.
 
 ### 2. Clone repo và tạo branch
 
 ```powershell
 cd "$HOME\Desktop"
-git clone https://github.com/Clownnvd/K4-L3B-kingpro-Day04-Prompt-Engineering-Tool-Calling-Labs.git
-cd K4-L3B-Day04
+git clone https://github.com/Clownnvd/K4-L3-DAY04-kingpro-PromptEngineeringToolCalling.git K4-L3-DAY04-kingpro
+cd K4-L3-DAY04-kingpro
 git switch -c contrib/nganduong-123
 git config user.name "Dương Thị Ngân"
 git config user.email "nguyenngan20022003@gmail.com"
@@ -53,11 +53,11 @@ git config user.email
 
 ### 3. Giải nén và chép payload
 
-Giải nén ZIP. Giả sử thư mục giải nén là `K4-L3B_NGAN_50_PERCENT`:
+Giải nén ZIP. Giả sử thư mục giải nén là `K4-L3-DAY04-kingpro-NGAN-50-PERCENT-v1`:
 
 ```powershell
-Copy-Item -Path "$HOME\Desktop\K4-L3B_NGAN_50_PERCENT\payload\*" `
-  -Destination "$HOME\Desktop\K4-L3B-Day04" -Recurse -Force
+Copy-Item -Path "$HOME\Desktop\K4-L3-DAY04-kingpro-NGAN-50-PERCENT-v1\payload\*" `
+  -Destination "$HOME\Desktop\K4-L3-DAY04-kingpro" -Recurse -Force
 ```
 
 Không chép `.env`, key hoặc token.
@@ -65,7 +65,7 @@ Không chép `.env`, key hoặc token.
 ### 4. Cài và chạy offline
 
 ```powershell
-cd "$HOME\Desktop\K4-L3B\starter_v0"
+cd "$HOME\Desktop\K4-L3-DAY04-kingpro\starter_v0"
 python -m pip install -r requirements.txt
 python -m compileall -q .
 python run_eval.py --provider offline --version ngan-draft --suite group --eval-cases data/eval_group.json
@@ -120,7 +120,7 @@ Tự viết 8–12 câu trong `artifacts/self_reflection_ngan.md`, dẫn file/ru
 ## Kiểm tra hoàn thành
 
 ```powershell
-cd "$HOME\Desktop\K4-L3B-Day04"
+cd "$HOME\Desktop\K4-L3-DAY04-kingpro"
 python assignments\nganduong-123\check_delivery.py
 ```
 
@@ -155,5 +155,7 @@ Sau khi push, mở GitHub và tạo Pull Request:
 - Title: `feat(lab4): Ngan tools eval safety and UI`
 
 Trong PR ghi rõ file đã sửa, lệnh đã chạy, kết quả run và giới hạn còn lại.
+
+
 
 
