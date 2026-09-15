@@ -73,10 +73,10 @@ class GeminiProvider:
         self,
         *,
         api_key_env: str = "GEMINI_API_KEY",
-        default_model: str = "gemini-3.5-flash",
+        default_model: str | None = None,
     ) -> None:
         self.api_key_env = api_key_env
-        self.default_model = default_model
+        self.default_model = default_model or os.getenv("GEMINI_MODEL", "gemini-3.7-flash")
 
     def complete(
         self,
@@ -104,6 +104,14 @@ class GeminiProvider:
             config_kwargs["system_instruction"] = system_instruction
         if declarations:
             config_kwargs["tools"] = [types.Tool(function_declarations=declarations)]
+            if tool_choice in {"required", "any"}:
+                config_kwargs["tool_config"] = types.ToolConfig(
+                    function_calling_config=types.FunctionCallingConfig(mode="ANY")
+                )
+            elif tool_choice == "none":
+                config_kwargs["tool_config"] = types.ToolConfig(
+                    function_calling_config=types.FunctionCallingConfig(mode="NONE")
+                )
 
         client = genai.Client(api_key=api_key)
         resp = client.models.generate_content(
