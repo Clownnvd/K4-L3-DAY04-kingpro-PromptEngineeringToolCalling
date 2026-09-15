@@ -1,0 +1,104 @@
+{
+  "scenario": "normal",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "version": "v3",
+  "artifact_version": "v3+p1c6766c4931f+t226ceee8f8a2",
+  "prompt_hash": "1c6766c4931fcb5135c73fcce716429409eb00b6193893bb1bbb148f7bda1dee",
+  "tools_hash": "226ceee8f8a292068d3ccc1fa40de0c651774d841defc707c9e830f4fbc62a08",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "VPN production hiện có đang gặp sự cố không?",
+      "status": "answered",
+      "assistant_text": "Trạng thái VPN trong môi trường production hiện đang gặp sự cố với tình trạng \"degraded\". Có sự cố về xác thực không ổn định cho một số máy khách Windows. \n\n- **Sự cố bắt đầu:** 14/09/2026, 07:35\n- **Cập nhật lần cuối:** 14/09/2026, 08:50\n- **Vị trí bị ảnh hưởng:** Bangkok, Remote\n- **Giải pháp tạm thời:** Thử lại sau khi đồng bộ hóa đồng hồ thiết bị.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ, hãy cho tôi biết!",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "check_service_status",
+              "args": {
+                "service": "vpn",
+                "environment": "production"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "check_service_status",
+              "args": {
+                "service": "vpn",
+                "environment": "production"
+              },
+              "result": {
+                "tool": "check_service_status",
+                "service": "vpn",
+                "environment": "production",
+                "status": "degraded",
+                "incident": "Intermittent authentication failures for some Windows clients",
+                "incident_id": "INC-1042",
+                "affected_locations": [
+                  "Bangkok",
+                  "Remote"
+                ],
+                "started_at": "2026-09-14T07:35:00+07:00",
+                "last_updated": "2026-09-14T08:50:00+07:00",
+                "workaround": "Retry once after synchronizing the device clock",
+                "checked_at": "2026-09-14T09:00:00+07:00"
+              }
+            }
+          ],
+          "usage": {
+            "input_tokens": 3166,
+            "output_tokens": 19,
+            "total_tokens": 3185
+          }
+        },
+        {
+          "round": 2,
+          "assistant_text": "Trạng thái VPN trong môi trường production hiện đang gặp sự cố với tình trạng \"degraded\". Có sự cố về xác thực không ổn định cho một số máy khách Windows. \n\n- **Sự cố bắt đầu:** 14/09/2026, 07:35\n- **Cập nhật lần cuối:** 14/09/2026, 08:50\n- **Vị trí bị ảnh hưởng:** Bangkok, Remote\n- **Giải pháp tạm thời:** Thử lại sau khi đồng bộ hóa đồng hồ thiết bị.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ, hãy cho tôi biết!",
+          "tool_calls": [],
+          "tool_results": [],
+          "usage": {
+            "input_tokens": 3469,
+            "output_tokens": 131,
+            "total_tokens": 3600
+          }
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "check_service_status",
+          "args": {
+            "service": "vpn",
+            "environment": "production"
+          },
+          "result": {
+            "tool": "check_service_status",
+            "service": "vpn",
+            "environment": "production",
+            "status": "degraded",
+            "incident": "Intermittent authentication failures for some Windows clients",
+            "incident_id": "INC-1042",
+            "affected_locations": [
+              "Bangkok",
+              "Remote"
+            ],
+            "started_at": "2026-09-14T07:35:00+07:00",
+            "last_updated": "2026-09-14T08:50:00+07:00",
+            "workaround": "Retry once after synchronizing the device clock",
+            "checked_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 6635,
+        "output_tokens": 150,
+        "total_tokens": 6785
+      }
+    }
+  ],
+  "generated_at": "2026-09-15T19:49:28"
+}

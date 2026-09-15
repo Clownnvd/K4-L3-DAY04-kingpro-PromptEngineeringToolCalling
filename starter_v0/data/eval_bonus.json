@@ -1,0 +1,48 @@
+{
+  "dataset_id": "kingpro_day04_live_api_bonus_v1",
+  "dataset_role": "bonus",
+  "description": "Hai ca ch?ng minh routing gi?a public live API v? d? li?u tr?ng th?i n?i b?.",
+  "cases": [
+    {
+      "id": "B01_github_public_status",
+      "phase": "B",
+      "query": "Ki?m tra tr?ng th?i c?ng khai hi?n t?i c?a GitHub.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_public_status",
+            "args": {
+              "provider": "github"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "G?i live external API ??ng ph?m vi, kh?ng c?n API key.",
+        "turn_type": "single"
+      }
+    },
+    {
+      "id": "B02_internal_vpn_stays_local",
+      "phase": "B",
+      "query": "Ki?m tra tr?ng th?i VPN production n?i b?.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "vpn",
+              "environment": "production"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Kh?ng nh?m public status API v?i shared service n?i b?.",
+        "turn_type": "single"
+      }
+    }
+  ]
+}
