@@ -1,0 +1,65 @@
+{
+  "scenario": "missing_info",
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
+  "version": "v3",
+  "artifact_version": "v3+pa728d0ca27a0+t1f5ba8de7e03",
+  "prompt_hash": "a728d0ca27a0d09691f72353d85d11e1595694b68a745690bf643c3592cb23c3",
+  "tools_hash": "1f5ba8de7e03a8090e208bc909d4456d160e07bd5b97ae16a0e8b45669351967",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "Kiểm tra Wi-Fi trên laptop của tôi giúp nhé.",
+      "status": "waiting_for_user",
+      "assistant_text": "Vui lòng cung cấp Asset ID của laptop (định dạng XX-123) để kiểm tra Wi‑Fi.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "clarify",
+              "args": {
+                "question": "Vui lòng cung cấp Asset ID của laptop (định dạng XX-123) để kiểm tra Wi‑Fi.",
+                "response_type": "text"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "clarify",
+              "args": {
+                "question": "Vui lòng cung cấp Asset ID của laptop (định dạng XX-123) để kiểm tra Wi‑Fi.",
+                "response_type": "text"
+              },
+              "result": {
+                "tool": "clarify",
+                "question": "Vui lòng cung cấp Asset ID của laptop (định dạng XX-123) để kiểm tra Wi‑Fi.",
+                "response_type": "text",
+                "options": [],
+                "awaiting_user": true
+              }
+            }
+          ]
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Vui lòng cung cấp Asset ID của laptop (định dạng XX-123) để kiểm tra Wi‑Fi.",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "clarify",
+            "question": "Vui lòng cung cấp Asset ID của laptop (định dạng XX-123) để kiểm tra Wi‑Fi.",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    }
+  ],
+  "generated_at": "2026-09-15T19:08:17"
+}
