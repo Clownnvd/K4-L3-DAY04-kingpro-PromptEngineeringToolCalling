@@ -12,4 +12,4 @@
 - **Điều học được:** cần chốt expected behavior và chạy baseline trước khi sửa; prompt giúp model quyết định, tool schema giúp truyền đúng tham số, còn implementation là lớp bảo vệ cuối.
 - **Nếu làm lại:** thêm deterministic confirmation token ở backend để giảm phụ thuộc vào việc model tự suy luận nguồn xác nhận.
 
-> Duy cần đọc lại và tự commit file này bằng Git identity của mình trước khi nộp.
+File này đã được commit bằng Git identity `Clownnvd` và merge vào `main` cùng evidence kỹ thuật của Duy.

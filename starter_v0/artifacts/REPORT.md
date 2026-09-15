@@ -161,6 +161,6 @@ Nhóm bắt đầu từ baseline và expected behavior thay vì sửa prompt the
 - [x] Có bốn transcript minh chứng.
 - [x] Có bonus tool thật, test và evidence.
 - [x] Không commit `.env`, API key, cache hoặc generated ticket.
-- [ ] Ngân tự hoàn thiện reflection và tạo commit kỹ thuật bằng Git identity `nganduong-123`.
-- [ ] Merge commit của Ngân vào branch nộp, không squash.
+- [x] Ngân đã hoàn thiện reflection và tạo commit kỹ thuật bằng Git identity `nganduong-123` (`9275944`, `fef1e6b`).
+- [x] Commit của Ngân đã merge vào `main` qua PR #3, không squash.
 - [ ] Cả Duy và Ngân nộp cùng URL repo trên VLearn.
