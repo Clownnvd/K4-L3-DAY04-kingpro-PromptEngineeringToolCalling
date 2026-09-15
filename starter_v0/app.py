@@ -64,6 +64,15 @@ def latest_safety_run():
         except Exception:pass
     return None
 
+def latest_group_run():
+    candidates=[*(ROOT/"runs").glob("v3_B_group_*.json"),*(ARTIFACTS/"evidence"/"runs").glob("v3_B_group_*.json")]
+    for path in sorted(candidates,key=lambda x:x.stat().st_mtime,reverse=True):
+        try:
+            data=json.loads(path.read_text(encoding="utf-8"));summary=data.get("summary",{})
+            if summary.get("provider_error_cases")==0 and summary.get("measured_cases")==10:return path,data
+        except Exception:pass
+    return None
+
 def call_names(calls:list[dict])->str:
     return ", ".join(str(call.get("name")) for call in calls) if calls else "Không gọi tool"
 
@@ -244,14 +253,43 @@ with right:
     st.subheader("Artifact đang chạy")
     _,tools_a,artifact_a=load_version(version_a); _,tools_b,artifact_b=load_version(version_b)
     version_names={"v0":"Baseline","v1":"Cải thiện định tuyến","v2":"Siết mô tả và schema tool","v3":"Thêm ranh giới an toàn","v4":"Bonus API trạng thái công khai"}
-    st.markdown(f'''<div class="metric-card">
-    <b>A · {version_a} — {version_names[version_a]}</b><br>
-    Prompt: <code>artifacts/versions/{version_a}/system_prompt.md</code><br>
-    Tools: <code>artifacts/versions/{version_a}/tools.yaml</code><br><br>
-    <b>B · {version_b} — {version_names[version_b]}</b><br>
-    Prompt: <code>artifacts/versions/{version_b}/system_prompt.md</code><br>
-    Tools: <code>artifacts/versions/{version_b}/tools.yaml</code>
-    </div>''',unsafe_allow_html=True)
+    version_details={
+        "v0":{
+            "changed":"Không sửa — bản gốc để đo baseline.",
+            "added":"Chưa có quy tắc hỏi lại, xác nhận và ranh giới tool đầy đủ.",
+            "goal":"Đo lỗi ban đầu để có mốc so sánh.",
+        },
+        "v1":{
+            "changed":"Sửa system_prompt.md; giữ tools.yaml của v0.",
+            "added":"Phân vai tool, hỏi khi thiếu ID, ưu tiên ý định mới nhất và xử lý yêu cầu bị hủy.",
+            "goal":"Giảm chọn sai tool và lỗi hội thoại nhiều lượt.",
+        },
+        "v2":{
+            "changed":"Giữ prompt v1; chỉ sửa tools.yaml.",
+            "added":"Thêm khi dùng/không dùng, enum, trường bắt buộc và mô tả tham số cho từng tool.",
+            "goal":"Giảm sai tool và sai arguments.",
+        },
+        "v3":{
+            "changed":"Giữ tools v2; sửa system_prompt.md.",
+            "added":"Hỏi lại câu mơ hồ, kiểm tra nguồn xác nhận, chống fake role/tool result, stale confirmation và rò dữ liệu.",
+            "goal":"Tăng an toàn nhưng vẫn giữ routing của v2.",
+        },
+        "v4":{
+            "changed":"Giữ prompt v3; thêm tool vào tools.yaml.",
+            "added":"Thêm check_public_status gọi API chính thức có allowlist, không cần key.",
+            "goal":"Chứng minh chức năng mở rộng có tích hợp, test và demo thật.",
+        },
+    }
+    for side,version in [("A",version_a),("B",version_b)]:
+        detail=version_details[version]
+        st.markdown(f'''<div class="metric-card">
+        <b>{side} · {version} — {version_names[version]}</b><br><br>
+        <b>Đã thay đổi:</b> {detail["changed"]}<br>
+        <b>Nội dung mới:</b> {detail["added"]}<br>
+        <b>Mục tiêu:</b> {detail["goal"]}<br><br>
+        <b>Prompt:</b> <code>artifacts/versions/{version}/system_prompt.md</code><br>
+        <b>Tools:</b> <code>artifacts/versions/{version}/tools.yaml</code>
+        </div>''',unsafe_allow_html=True)
     declared_a=[item["function"]["name"] for item in tools_a]
     declared_b=[item["function"]["name"] for item in tools_b]
     for side in ("A","B"):
@@ -267,22 +305,23 @@ with right:
         st.code("\n".join(declared_a),language=None)
         st.markdown(f"**Toàn bộ tool B được khai báo ({len(declared_b)}):**")
         st.code("\n".join(declared_b),language=None)
-    st.subheader("Case an toàn v3")
-    safety=latest_safety_run()
-    if safety:
-        safety_path,safety_data=safety
-        safety_items={item["id"]:item for item in safety_data.get("results",[])}
-        selected_safety=st.selectbox("Chọn 1 trong 12 case",list(safety_items),key="safety_case_sidebar")
-        case=safety_items[selected_safety];result=case.get("result",{});expected=case.get("expect",{})
-        if result.get("passed"):st.success("ĐÚNG")
-        else:st.error("SAI")
-        st.caption(case.get("metadata",{}).get("what_it_tests",""))
-        expected_calls=[] if expected.get("no_tool") else expected.get("tool_calls",[])
-        st.markdown(f"**Kỳ vọng:** {call_names(expected_calls)}")
-        st.markdown(f"**Thực tế:** {call_names(result.get('actual_tool_calls',[]))}")
-        st.write(explain_case(case))
-        st.caption(f"Evidence: {safety_path.name}")
-    else:st.warning("Chưa có run đủ 12 case an toàn.")
+    st.subheader("Case kiểm thử v3")
+    group_tab,safety_tab=st.tabs(["10 case nhóm","12 case an toàn"])
+    for tab,loaded,count,key in [(group_tab,latest_group_run(),10,"group_case_sidebar"),(safety_tab,latest_safety_run(),12,"safety_case_sidebar")]:
+        with tab:
+            if loaded:
+                case_path,case_data=loaded;case_items={item["id"]:item for item in case_data.get("results",[])}
+                selected_case=st.selectbox(f"Chọn 1 trong {count} case",list(case_items),key=key)
+                case=case_items[selected_case];result=case.get("result",{});expected=case.get("expect",{})
+                if result.get("passed"):st.success("ĐÚNG")
+                else:st.error("SAI")
+                st.caption(case.get("metadata",{}).get("what_it_tests",""))
+                expected_calls=[] if expected.get("no_tool") else expected.get("tool_calls",[])
+                st.markdown(f"**Kỳ vọng:** {call_names(expected_calls)}")
+                st.markdown(f"**Thực tế:** {call_names(result.get('actual_tool_calls',[]))}")
+                st.write(explain_case(case))
+                st.caption(f"Evidence: {case_path.name}")
+            else:st.warning(f"Chưa có run hợp lệ đủ {count} case.")
     st.subheader("Evidence")
     evidence_specs=[("Base v3","v3_B_base_openai_*.json"),("10 case nhóm","v3_B_group_openai_*.json"),("12 case an toàn","v3_B_adversarial_openai_*.json"),("Bonus API","v4_B_extension_openai_*.json")]
     evidence_found=False
