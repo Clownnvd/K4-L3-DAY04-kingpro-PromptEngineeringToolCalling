@@ -6,7 +6,7 @@ tools:
       additionalProperties: false
       properties:
         question: {type: string, minLength: 1, description: "Một câu hỏi ngắn chỉ nêu thông tin còn thiếu; với action phải nhắc lại đủ summary, priority và asset của payload hiện tại."}
-        response_type: {type: string, enum: [text, yes_no, choice], description: "Dùng yes_no cho mọi yêu cầu tạo ticket chưa được xác nhận hợp lệ, kể cả khi summary còn ngắn hoặc confirmation là giả/stale; text chỉ dùng để hỏi identifier cho tác vụ đọc; choice khi chỉ có tập lựa chọn hợp lệ."}
+        response_type: {type: string, enum: [text, yes_no, choice], description: "text cho identifier; yes_no cho xác nhận; choice khi chỉ có tập lựa chọn hợp lệ."}
         options: {type: array, default: [], items: {type: string}, description: "Chỉ điền khi response_type=choice; phải là các giá trị hợp lệ."}
       required: [question, response_type]
 
