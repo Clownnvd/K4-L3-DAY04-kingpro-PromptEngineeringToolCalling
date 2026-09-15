@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
-import time
 from typing import Any
 
 from providers.base import ModelResponse, ToolCall
@@ -91,10 +89,7 @@ class GeminiProvider:
         default_model: str | None = None,
     ) -> None:
         self.api_key_env = api_key_env
-        self.default_model = default_model or os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
-        self.min_interval = float(os.getenv("GEMINI_MIN_INTERVAL_SECONDS", "13"))
-        self.max_retries = int(os.getenv("GEMINI_MAX_RETRIES", "6"))
-        self._last_request_at = 0.0
+        self.default_model = default_model or os.getenv("GEMINI_MODEL", "gemini-3.7-flash")
 
     def complete(
         self,
@@ -132,30 +127,11 @@ class GeminiProvider:
                 )
 
         client = genai.Client(api_key=api_key)
-        resp = None
-        for attempt in range(self.max_retries + 1):
-            wait_before = self.min_interval - (time.monotonic() - self._last_request_at)
-            if wait_before > 0:
-                time.sleep(wait_before)
-            try:
-                resp = client.models.generate_content(
-                    model=model or self.default_model,
-                    contents=contents,
-                    config=types.GenerateContentConfig(**config_kwargs),
-                )
-                self._last_request_at = time.monotonic()
-                break
-            except Exception as exc:
-                message = str(exc)
-                retryable = "429" in message or "RESOURCE_EXHAUSTED" in message or "503" in message or "UNAVAILABLE" in message
-                if not retryable or attempt >= self.max_retries:
-                    raise
-                match = re.search(r"retry(?:Delay| in)[^0-9]*(\d+(?:\.\d+)?)", message, re.IGNORECASE)
-                delay = float(match.group(1)) if match else max(self.min_interval, min(60.0, 5.0 * (attempt + 1)))
-                time.sleep(delay + 1.0)
-                self._last_request_at = time.monotonic()
-        if resp is None:
-            raise RuntimeError("Gemini request ended without a response.")
+        resp = client.models.generate_content(
+            model=model or self.default_model,
+            contents=contents,
+            config=types.GenerateContentConfig(**config_kwargs),
+        )
 
         text_parts: list[str] = []
         calls: list[ToolCall] = []

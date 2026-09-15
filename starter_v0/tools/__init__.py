@@ -7,7 +7,6 @@ import yaml
 
 from .clarify.tool import ask_user
 from .check_service_status.tool import check_service_status
-from .check_public_status.tool import check_public_status
 from .create_ticket.tool import create_ticket
 from .format_incident_report.tool import format_incident_report
 from .inspect_device.tool import inspect_device
@@ -27,7 +26,6 @@ TOOL_FUNCTIONS = {
     "search_kb": search_kb,
     "search_device_info": search_device_info,
     "check_service_status": check_service_status,
-    "check_public_status": check_public_status,
     "inspect_device": inspect_device,
     "lookup_user": lookup_user,
     "format_incident_report": format_incident_report,

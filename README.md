@@ -177,30 +177,3 @@ Xem [LAB-GUIDE.md](LAB-GUIDE.md) để tham khảo một quy trình làm bài g�
 Xem [SUBMISSION-GUIDE.md](SUBMISSION-GUIDE.md) để xem hướng dẫn cách nộp bài lab
 
 Không nộp `.env`, API key, `.venv`, cache, generated tickets hoặc dữ liệu thật.
-
-
-
-## Cách chạy bài của nhóm kingpro
-
-Bộ evidence chính dùng duy nhất `gpt-4o-mini` qua OpenAI API để kết quả v0–v3 có thể so sánh. Groq và Gemini chỉ là phương án chọn thêm trên UI. Giữ mọi API key trong `starter_v0/.env`; không commit file này.
-
-```powershell
-cd starter_v0
-python -m pip install -r requirements.txt
-python scripts/preflight_provider.py --provider openai --model gpt-4o-mini
-python scripts/run_full_lab.py --provider openai --model gpt-4o-mini
-```
-
-Mở giao diện chat có hai phiên bản trả lời:
-
-```powershell
-python -m streamlit run app.py --server.port 8501
-```
-
-Mở giao diện so sánh case và bảng 12 tình huống an toàn:
-
-```powershell
-python -m streamlit run case_compare_app.py --server.port 8502
-```
-
-Hai giao diện hiển thị phiên bản artifact, tên prompt/tools, tool calls, args, result/error, giải thích ĐÚNG/SAI và transcript. UI cũng tính chi phí thật của `gpt-4o-mini` theo token. Bonus `check_public_status` gọi endpoint chính thức của GitHub, Cloudflare hoặc Atlassian từ allowlist cố định và không gửi dữ liệu nội bộ ra ngoài. Xem báo cáo đầy đủ tại `starter_v0/artifacts/REPORT.md`.
