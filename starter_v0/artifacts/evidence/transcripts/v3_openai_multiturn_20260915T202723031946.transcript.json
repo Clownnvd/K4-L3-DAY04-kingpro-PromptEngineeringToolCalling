@@ -1,0 +1,188 @@
+{
+  "scenario": "multiturn",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "version": "v3",
+  "artifact_version": "v3+p596719b51b1c+t057bc9b3211b",
+  "prompt_hash": "596719b51b1cf8de30b4f53e344736a507f2c2bbc82cbc850977a4a13abf09b2",
+  "tools_hash": "057bc9b3211b268068a68918cf376edb0f91770c81e7a6a1ea1f72c8635e31cb",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "Kiểm tra email production.",
+      "status": "answered",
+      "assistant_text": "Trạng thái dịch vụ email trong môi trường production hiện đang hoạt động bình thường (operational). Không có sự cố nào được ghi nhận.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ khác, hãy cho tôi biết!",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "check_service_status",
+              "args": {
+                "service": "email",
+                "environment": "production"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "check_service_status",
+              "args": {
+                "service": "email",
+                "environment": "production"
+              },
+              "result": {
+                "tool": "check_service_status",
+                "service": "email",
+                "environment": "production",
+                "status": "operational",
+                "incident": null,
+                "incident_id": null,
+                "affected_locations": [],
+                "started_at": null,
+                "last_updated": "2026-09-14T08:58:00+07:00",
+                "workaround": null,
+                "checked_at": "2026-09-14T09:00:00+07:00"
+              }
+            }
+          ],
+          "usage": {
+            "input_tokens": 3245,
+            "output_tokens": 19,
+            "total_tokens": 3264
+          }
+        },
+        {
+          "round": 2,
+          "assistant_text": "Trạng thái dịch vụ email trong môi trường production hiện đang hoạt động bình thường (operational). Không có sự cố nào được ghi nhận.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ khác, hãy cho tôi biết!",
+          "tool_calls": [],
+          "tool_results": [],
+          "usage": {
+            "input_tokens": 3500,
+            "output_tokens": 46,
+            "total_tokens": 3546
+          }
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "check_service_status",
+          "args": {
+            "service": "email",
+            "environment": "production"
+          },
+          "result": {
+            "tool": "check_service_status",
+            "service": "email",
+            "environment": "production",
+            "status": "operational",
+            "incident": null,
+            "incident_id": null,
+            "affected_locations": [],
+            "started_at": null,
+            "last_updated": "2026-09-14T08:58:00+07:00",
+            "workaround": null,
+            "checked_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 6745,
+        "output_tokens": 65,
+        "total_tokens": 6810
+      }
+    },
+    {
+      "turn": 2,
+      "user": "À nhầm, chỉ kiểm tra email staging.",
+      "status": "answered",
+      "assistant_text": "Trạng thái dịch vụ email trong môi trường staging hiện đang trong quá trình bảo trì (maintenance) do nâng cấp kết nối đã được lên kế hoạch. \n\n- **Sự cố:** Nâng cấp kết nối\n- **Mã sự cố:** CHG-221\n- **Thời gian bắt đầu:** 14/09/2026, 08:00\n- **Thời gian cập nhật cuối:** 14/09/2026, 08:40\n- **Giải pháp tạm thời:** Sử dụng tenant production cho các tin nhắn thử nghiệm đã được phê duyệt.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ khác, hãy cho tôi biết!",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "check_service_status",
+              "args": {
+                "service": "email",
+                "environment": "staging"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "check_service_status",
+              "args": {
+                "service": "email",
+                "environment": "staging"
+              },
+              "result": {
+                "tool": "check_service_status",
+                "service": "email",
+                "environment": "staging",
+                "status": "maintenance",
+                "incident": "Planned connector upgrade",
+                "incident_id": "CHG-221",
+                "affected_locations": [
+                  "All"
+                ],
+                "started_at": "2026-09-14T08:00:00+07:00",
+                "last_updated": "2026-09-14T08:40:00+07:00",
+                "workaround": "Use the production tenant for approved test messages",
+                "checked_at": "2026-09-14T09:00:00+07:00"
+              }
+            }
+          ],
+          "usage": {
+            "input_tokens": 3308,
+            "output_tokens": 20,
+            "total_tokens": 3328
+          }
+        },
+        {
+          "round": 2,
+          "assistant_text": "Trạng thái dịch vụ email trong môi trường staging hiện đang trong quá trình bảo trì (maintenance) do nâng cấp kết nối đã được lên kế hoạch. \n\n- **Sự cố:** Nâng cấp kết nối\n- **Mã sự cố:** CHG-221\n- **Thời gian bắt đầu:** 14/09/2026, 08:00\n- **Thời gian cập nhật cuối:** 14/09/2026, 08:40\n- **Giải pháp tạm thời:** Sử dụng tenant production cho các tin nhắn thử nghiệm đã được phê duyệt.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ khác, hãy cho tôi biết!",
+          "tool_calls": [],
+          "tool_results": [],
+          "usage": {
+            "input_tokens": 3603,
+            "output_tokens": 144,
+            "total_tokens": 3747
+          }
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "check_service_status",
+          "args": {
+            "service": "email",
+            "environment": "staging"
+          },
+          "result": {
+            "tool": "check_service_status",
+            "service": "email",
+            "environment": "staging",
+            "status": "maintenance",
+            "incident": "Planned connector upgrade",
+            "incident_id": "CHG-221",
+            "affected_locations": [
+              "All"
+            ],
+            "started_at": "2026-09-14T08:00:00+07:00",
+            "last_updated": "2026-09-14T08:40:00+07:00",
+            "workaround": "Use the production tenant for approved test messages",
+            "checked_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 6911,
+        "output_tokens": 164,
+        "total_tokens": 7075
+      }
+    }
+  ],
+  "generated_at": "2026-09-15T20:27:23"
+}
