@@ -7,6 +7,19 @@ from typing import Any
 from providers.base import ModelResponse, ToolCall
 
 
+def _gemini_schema(value: Any) -> Any:
+    """Drop JSON Schema fields unsupported by Gemini function declarations."""
+    if isinstance(value, dict):
+        return {
+            key: _gemini_schema(item)
+            for key, item in value.items()
+            if key not in {"additionalProperties", "additional_properties"}
+        }
+    if isinstance(value, list):
+        return [_gemini_schema(item) for item in value]
+    return value
+
+
 def _to_gemini_declarations(tools: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
     declarations: list[dict[str, Any]] = []
     for item in tools or []:
@@ -14,7 +27,7 @@ def _to_gemini_declarations(tools: list[dict[str, Any]] | None) -> list[dict[str
         declarations.append({
             "name": function["name"],
             "description": function.get("description", ""),
-            "parameters": function.get("parameters", {"type": "object", "properties": {}}),
+            "parameters": _gemini_schema(function.get("parameters", {"type": "object", "properties": {}})),
         })
     return declarations
 
