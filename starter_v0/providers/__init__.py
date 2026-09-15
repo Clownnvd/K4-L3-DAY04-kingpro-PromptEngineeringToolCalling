@@ -8,11 +8,7 @@ from providers.offline_provider import OfflineRuleProvider
 
 def make_provider(name: str):
     if name == "openai":
-        return OpenAIProvider(
-            default_model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-            max_completion_tokens=int(os.getenv("OPENAI_MAX_COMPLETION_TOKENS", "300")),
-            max_retries=int(os.getenv("OPENAI_MAX_RETRIES", "4")),
-        )
+        return OpenAIProvider()
     if name == "openrouter":
         return OpenRouterProvider()
     if name == "anthropic":
@@ -24,4 +20,3 @@ def make_provider(name: str):
     if name == "offline":
         return OfflineRuleProvider()
     raise ValueError(f"Unknown provider: {name}")
-import os

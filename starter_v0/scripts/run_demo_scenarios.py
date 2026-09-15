@@ -22,7 +22,7 @@ SCENARIOS={
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument("--provider",choices=["openai","gemini","groq","offline"],default="openai")
+    parser.add_argument("--provider",choices=["gemini","groq","offline"],default="groq")
     parser.add_argument("--model",default=None)
     parser.add_argument("--output-dir",type=Path,default=ROOT/"transcripts")
     args=parser.parse_args()

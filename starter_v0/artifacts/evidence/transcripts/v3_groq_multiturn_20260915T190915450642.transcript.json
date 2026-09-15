@@ -1,17 +1,17 @@
 {
   "scenario": "multiturn",
-  "provider": "openai",
-  "model": "gpt-4o-mini",
+  "provider": "groq",
+  "model": "openai/gpt-oss-120b",
   "version": "v3",
-  "artifact_version": "v3+p1c6766c4931f+t226ceee8f8a2",
-  "prompt_hash": "1c6766c4931fcb5135c73fcce716429409eb00b6193893bb1bbb148f7bda1dee",
-  "tools_hash": "226ceee8f8a292068d3ccc1fa40de0c651774d841defc707c9e830f4fbc62a08",
+  "artifact_version": "v3+pa728d0ca27a0+t1f5ba8de7e03",
+  "prompt_hash": "a728d0ca27a0d09691f72353d85d11e1595694b68a745690bf643c3592cb23c3",
+  "tools_hash": "1f5ba8de7e03a8090e208bc909d4456d160e07bd5b97ae16a0e8b45669351967",
   "turns": [
     {
       "turn": 1,
       "user": "Kiểm tra email production.",
       "status": "answered",
-      "assistant_text": "Trạng thái dịch vụ email trong môi trường production hiện tại là \"hoạt động bình thường\" (operational). Không có sự cố nào được ghi nhận.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ khác, hãy cho biết!",
+      "assistant_text": "Dịch vụ email trong môi trường production hiện đang **operational** (hoạt động bình thường).",
       "rounds": [
         {
           "round": 1,
@@ -20,8 +20,8 @@
             {
               "name": "check_service_status",
               "args": {
-                "service": "email",
-                "environment": "production"
+                "environment": "production",
+                "service": "email"
               }
             }
           ],
@@ -29,8 +29,8 @@
             {
               "tool": "check_service_status",
               "args": {
-                "service": "email",
-                "environment": "production"
+                "environment": "production",
+                "service": "email"
               },
               "result": {
                 "tool": "check_service_status",
@@ -46,31 +46,21 @@
                 "checked_at": "2026-09-14T09:00:00+07:00"
               }
             }
-          ],
-          "usage": {
-            "input_tokens": 3162,
-            "output_tokens": 19,
-            "total_tokens": 3181
-          }
+          ]
         },
         {
           "round": 2,
-          "assistant_text": "Trạng thái dịch vụ email trong môi trường production hiện tại là \"hoạt động bình thường\" (operational). Không có sự cố nào được ghi nhận.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ khác, hãy cho biết!",
+          "assistant_text": "Dịch vụ email trong môi trường production hiện đang **operational** (hoạt động bình thường).",
           "tool_calls": [],
-          "tool_results": [],
-          "usage": {
-            "input_tokens": 3417,
-            "output_tokens": 49,
-            "total_tokens": 3466
-          }
+          "tool_results": []
         }
       ],
       "tool_events": [
         {
           "tool": "check_service_status",
           "args": {
-            "service": "email",
-            "environment": "production"
+            "environment": "production",
+            "service": "email"
           },
           "result": {
             "tool": "check_service_status",
@@ -86,18 +76,13 @@
             "checked_at": "2026-09-14T09:00:00+07:00"
           }
         }
-      ],
-      "usage": {
-        "input_tokens": 6579,
-        "output_tokens": 68,
-        "total_tokens": 6647
-      }
+      ]
     },
     {
       "turn": 2,
       "user": "À nhầm, chỉ kiểm tra email staging.",
       "status": "answered",
-      "assistant_text": "Trạng thái dịch vụ email trong môi trường staging hiện tại là \"đang bảo trì\" (maintenance) do nâng cấp kết nối đã được lên kế hoạch. Sự cố này ảnh hưởng đến tất cả các vị trí và bắt đầu từ 08:00 ngày 14 tháng 9 năm 2026. \n\n**Thông tin chi tiết:**\n- **Sự cố:** Nâng cấp kết nối đã lên kế hoạch\n- **ID sự cố:** CHG-221\n- **Thời gian bắt đầu:** 08:00, 14/09/2026\n- **Cách giải quyết tạm thời:** Sử dụng tenant production cho các tin nhắn thử nghiệm đã được phê duyệt.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ khác, hãy cho biết!",
+      "assistant_text": "Dịch vụ email trong môi trường **staging** hiện đang ở trạng thái **maintenance** do nâng cấp connector theo kế hoạch (incident CHG‑221). Bạn có thể dùng tenant production để gửi các tin thử nghiệm được phê duyệt. Nếu cần hỗ trợ thêm, vui lòng cho biết.",
       "rounds": [
         {
           "round": 1,
@@ -106,8 +91,8 @@
             {
               "name": "check_service_status",
               "args": {
-                "service": "email",
-                "environment": "staging"
+                "environment": "staging",
+                "service": "email"
               }
             }
           ],
@@ -115,8 +100,8 @@
             {
               "tool": "check_service_status",
               "args": {
-                "service": "email",
-                "environment": "staging"
+                "environment": "staging",
+                "service": "email"
               },
               "result": {
                 "tool": "check_service_status",
@@ -134,31 +119,21 @@
                 "checked_at": "2026-09-14T09:00:00+07:00"
               }
             }
-          ],
-          "usage": {
-            "input_tokens": 3228,
-            "output_tokens": 20,
-            "total_tokens": 3248
-          }
+          ]
         },
         {
           "round": 2,
-          "assistant_text": "Trạng thái dịch vụ email trong môi trường staging hiện tại là \"đang bảo trì\" (maintenance) do nâng cấp kết nối đã được lên kế hoạch. Sự cố này ảnh hưởng đến tất cả các vị trí và bắt đầu từ 08:00 ngày 14 tháng 9 năm 2026. \n\n**Thông tin chi tiết:**\n- **Sự cố:** Nâng cấp kết nối đã lên kế hoạch\n- **ID sự cố:** CHG-221\n- **Thời gian bắt đầu:** 08:00, 14/09/2026\n- **Cách giải quyết tạm thời:** Sử dụng tenant production cho các tin nhắn thử nghiệm đã được phê duyệt.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ khác, hãy cho biết!",
+          "assistant_text": "Dịch vụ email trong môi trường **staging** hiện đang ở trạng thái **maintenance** do nâng cấp connector theo kế hoạch (incident CHG‑221). Bạn có thể dùng tenant production để gửi các tin thử nghiệm được phê duyệt. Nếu cần hỗ trợ thêm, vui lòng cho biết.",
           "tool_calls": [],
-          "tool_results": [],
-          "usage": {
-            "input_tokens": 3523,
-            "output_tokens": 165,
-            "total_tokens": 3688
-          }
+          "tool_results": []
         }
       ],
       "tool_events": [
         {
           "tool": "check_service_status",
           "args": {
-            "service": "email",
-            "environment": "staging"
+            "environment": "staging",
+            "service": "email"
           },
           "result": {
             "tool": "check_service_status",
@@ -176,13 +151,8 @@
             "checked_at": "2026-09-14T09:00:00+07:00"
           }
         }
-      ],
-      "usage": {
-        "input_tokens": 6751,
-        "output_tokens": 185,
-        "total_tokens": 6936
-      }
+      ]
     }
   ],
-  "generated_at": "2026-09-15T19:49:37"
+  "generated_at": "2026-09-15T19:09:15"
 }

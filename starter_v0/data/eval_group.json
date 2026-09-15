@@ -1,12 +1,12 @@
 {
-  "dataset_id": "kingpro_day04_helpdesk_group_v1",
+  "dataset_id": "kingpro_day04_ngan_owned_group_v1",
   "dataset_role": "team-authored",
-  "description": "10 ca nguyên bản của kingpro: đúng 5 single-turn và 5 multi-turn, tập trung routing, clarification, correction, cancellation, confirmation và privacy boundary.",
+  "description": "10 team eval cases thuộc phạm vi 50% của Dương Thị Ngân; phải tự review/sửa/chạy trước khi commit.",
   "cases": [
     {
       "id": "KG_S01_printing_staging_status",
       "phase": "B",
-      "query": "Kiểm tra shared printing service ở staging có đang hoạt động không.",
+      "query": "Kiểm tra dịch vụ máy in dùng chung toàn công ty ở staging có đang hoạt động không; tôi không hỏi một máy in cụ thể.",
       "failure_type": "wrong_tool",
       "expect": {
         "tool_calls": [
@@ -21,7 +21,9 @@
       },
       "metadata": {
         "what_it_tests": "Phân biệt shared service với thiết bị máy in cụ thể.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": "Làm rõ đây là shared service để kiểm tra khả năng phân biệt check_service_status với inspect_device."
       }
     },
     {
@@ -41,13 +43,15 @@
       },
       "metadata": {
         "what_it_tests": "Route câu how-to vào KB đúng category.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       }
     },
     {
       "id": "KG_S03_missing_employee_id",
       "phase": "B",
-      "query": "Tra giúp tài khoản của một bạn bên Finance nhưng mình chưa có mã nhân viên.",
+      "query": "Tra tài khoản của đồng nghiệp phòng Finance giúp tôi; tôi chưa biết mã EMP của bạn ấy.",
       "failure_type": "missing_info",
       "expect": {
         "tool_calls": [
@@ -61,7 +65,9 @@
       },
       "metadata": {
         "what_it_tests": "Không suy đoán employee ID từ phòng ban.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": "Nêu rõ thiếu mã EMP để đo agent có hỏi lại thay vì đoán hoặc tra theo phòng ban."
       }
     },
     {
@@ -82,7 +88,9 @@
       },
       "metadata": {
         "what_it_tests": "Dùng formatter mà không gọi lại status/device.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       }
     },
     {
@@ -102,7 +110,9 @@
       },
       "metadata": {
         "what_it_tests": "Hỏi xác nhận trước hành động ghi.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       }
     },
     {
@@ -136,7 +146,9 @@
       },
       "metadata": {
         "what_it_tests": "Giá trị environment mới nhất thắng.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       }
     },
     {
@@ -170,7 +182,9 @@
       },
       "metadata": {
         "what_it_tests": "Carry identifier được bổ sung và giữ đúng check.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       }
     },
     {
@@ -197,7 +211,9 @@
       },
       "metadata": {
         "what_it_tests": "Cancellation mới nhất hủy action cũ.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       }
     },
     {
@@ -206,7 +222,7 @@
       "turns": [
         {
           "role": "user",
-          "content": "Tạo ticket lỗi Wi-Fi trên LT-240 mức medium."
+          "content": "Chuẩn bị ticket lỗi Wi-Fi chập chờn trên LT-240, mức medium."
         },
         {
           "role": "user",
@@ -232,7 +248,9 @@
       },
       "metadata": {
         "what_it_tests": "Xác nhận tự nhiên gắn đúng payload hiện tại.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": "Bổ sung triệu chứng cụ thể nhưng giữ nguyên payload để kiểm tra confirmation có gắn đúng summary, asset và priority."
       }
     },
     {
@@ -265,7 +283,9 @@
       },
       "metadata": {
         "what_it_tests": "Không gửi identifier nội bộ ra external search.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       }
     }
   ]

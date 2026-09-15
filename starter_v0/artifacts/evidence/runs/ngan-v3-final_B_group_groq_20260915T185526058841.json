@@ -1,20 +1,20 @@
 {
-  "run_id": "v3_B_group_openai_20260915T194831027122",
-  "version": "v3",
-  "artifact_version": "v3+p1c6766c4931f+t6c6c8fd39ee4",
-  "prompt_hash": "1c6766c4931fcb5135c73fcce716429409eb00b6193893bb1bbb148f7bda1dee",
-  "tools_hash": "6c6c8fd39ee4fa918aa53980468e4475f04b1c7de004e86302f706007cc0b457",
+  "run_id": "ngan-v3-final_B_group_groq_20260915T185526058841",
+  "version": "ngan-v3-final",
+  "artifact_version": "ngan-v3-final+p4e38390ac8fa+t6946abb2a8e7",
+  "prompt_hash": "4e38390ac8face120aa57979e63231fece7017887395321a419a1556e8aeeb86",
+  "tools_hash": "6946abb2a8e7374b45ec74cf5a32d2ae5eba81a20420703ce3ab366daa259521",
   "phase": "B",
   "suite": "group",
-  "provider": "openai",
-  "model": "gpt-4o-mini",
-  "system_prompt": "artifacts\\versions\\v3\\system_prompt.md",
-  "tools": "artifacts\\versions\\v3\\tools.yaml",
+  "provider": "groq",
+  "model": "openai/gpt-oss-20b",
+  "system_prompt": "C:\\Users\\admin\\Downloads\\K4-L3-DAY04-kingpro\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "C:\\Users\\admin\\Downloads\\K4-L3-DAY04-kingpro\\starter_v0\\artifacts\\tools.yaml",
   "eval_cases": "data\\eval_group.json",
-  "dataset_id": "kingpro_day04_helpdesk_group_v1",
+  "dataset_id": "kingpro_day04_ngan_owned_group_v1",
   "dataset_role": "team-authored",
-  "description": "10 ca nguyên bản của kingpro: đúng 5 single-turn và 5 multi-turn, tập trung routing, clarification, correction, cancellation, confirmation và privacy boundary.",
-  "generated_at": "2026-09-15T19:48:31",
+  "description": "10 team eval cases thuộc phạm vi 50% của Dương Thị Ngân; phải tự review/sửa/chạy trước khi commit.",
+  "generated_at": "2026-09-15T18:55:26",
   "summary": {
     "total_cases": 10,
     "measured_cases": 10,
@@ -36,9 +36,11 @@
       "is_multiturn": false,
       "metadata": {
         "what_it_tests": "Phân biệt shared service với thiết bị máy in cụ thể.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": "Làm rõ đây là shared service để kiểm tra khả năng phân biệt check_service_status với inspect_device."
       },
-      "input": "Kiểm tra shared printing service ở staging có đang hoạt động không.",
+      "input": "Kiểm tra dịch vụ máy in dùng chung toàn công ty ở staging có đang hoạt động không; tôi không hỏi một máy in cụ thể.",
       "expect": {
         "tool_calls": [
           {
@@ -58,8 +60,8 @@
           {
             "name": "check_service_status",
             "args": {
-              "service": "printing",
-              "environment": "staging"
+              "environment": "staging",
+              "service": "printing"
             }
           }
         ],
@@ -73,8 +75,8 @@
         {
           "tool": "check_service_status",
           "args": {
-            "service": "printing",
-            "environment": "staging"
+            "environment": "staging",
+            "service": "printing"
           },
           "result": {
             "tool": "check_service_status",
@@ -100,7 +102,9 @@
       "is_multiturn": false,
       "metadata": {
         "what_it_tests": "Route câu how-to vào KB đúng category.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       },
       "input": "Tìm hướng dẫn xử lý âm thanh phòng họp bị mất tiếng.",
       "expect": {
@@ -121,8 +125,8 @@
           {
             "name": "search_kb",
             "args": {
-              "query": "âm thanh phòng họp bị mất tiếng",
               "category": "meeting_room",
+              "query": "âm thanh phòng họp bị mất tiếng",
               "top_k": 3
             }
           }
@@ -137,8 +141,8 @@
         {
           "tool": "search_kb",
           "args": {
-            "query": "âm thanh phòng họp bị mất tiếng",
             "category": "meeting_room",
+            "query": "âm thanh phòng họp bị mất tiếng",
             "top_k": 3
           },
           "result": {
@@ -171,9 +175,11 @@
       "is_multiturn": false,
       "metadata": {
         "what_it_tests": "Không suy đoán employee ID từ phòng ban.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": "Nêu rõ thiếu mã EMP để đo agent có hỏi lại thay vì đoán hoặc tra theo phòng ban."
       },
-      "input": "Tra giúp tài khoản của một bạn bên Finance nhưng mình chưa có mã nhân viên.",
+      "input": "Tra tài khoản của đồng nghiệp phòng Finance giúp tôi; tôi chưa biết mã EMP của bạn ấy.",
       "expect": {
         "tool_calls": [
           {
@@ -192,7 +198,7 @@
           {
             "name": "clarify",
             "args": {
-              "question": "Vui lòng cung cấp mã nhân viên để tôi có thể tra cứu thông tin tài khoản.",
+              "question": "Bạn vui lòng cung cấp mã EMP của đồng nghiệp phòng Finance để tôi tra cứu tài khoản.",
               "response_type": "text"
             }
           }
@@ -207,12 +213,12 @@
         {
           "tool": "clarify",
           "args": {
-            "question": "Vui lòng cung cấp mã nhân viên để tôi có thể tra cứu thông tin tài khoản.",
+            "question": "Bạn vui lòng cung cấp mã EMP của đồng nghiệp phòng Finance để tôi tra cứu tài khoản.",
             "response_type": "text"
           },
           "result": {
             "tool": "clarify",
-            "question": "Vui lòng cung cấp mã nhân viên để tôi có thể tra cứu thông tin tài khoản.",
+            "question": "Bạn vui lòng cung cấp mã EMP của đồng nghiệp phòng Finance để tôi tra cứu tài khoản.",
             "response_type": "text",
             "options": [],
             "awaiting_user": true
@@ -228,7 +234,9 @@
       "is_multiturn": false,
       "metadata": {
         "what_it_tests": "Dùng formatter mà không gọi lại status/device.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       },
       "input": "Chỉ định dạng các findings sau thành brief report tên 'Wi-Fi tầng 3': packet loss 8%; access point reachable. Không kiểm tra lại.",
       "expect": {
@@ -252,16 +260,16 @@
             "args": {
               "findings": [
                 {
-                  "label": "packet loss",
-                  "detail": "8%"
+                  "detail": "packet loss 8%",
+                  "label": "packet loss"
                 },
                 {
-                  "label": "access point",
-                  "detail": "reachable"
+                  "detail": "access point reachable",
+                  "label": "access point status"
                 }
               ],
-              "template": "brief",
-              "incident_title": "Wi-Fi tầng 3"
+              "incident_title": "Wi-Fi tầng 3",
+              "template": "brief"
             }
           }
         ],
@@ -277,21 +285,21 @@
           "args": {
             "findings": [
               {
-                "label": "packet loss",
-                "detail": "8%"
+                "detail": "packet loss 8%",
+                "label": "packet loss"
               },
               {
-                "label": "access point",
-                "detail": "reachable"
+                "detail": "access point reachable",
+                "label": "access point status"
               }
             ],
-            "template": "brief",
-            "incident_title": "Wi-Fi tầng 3"
+            "incident_title": "Wi-Fi tầng 3",
+            "template": "brief"
           },
           "result": {
             "tool": "format_incident_report",
             "template": "brief",
-            "markdown": "**Wi-Fi tầng 3**\n- **packet loss:** 8%\n- **access point:** reachable",
+            "markdown": "**Wi-Fi tầng 3**\n- **packet loss:** packet loss 8%\n- **access point status:** access point reachable",
             "finding_count": 2
           }
         }
@@ -305,7 +313,9 @@
       "is_multiturn": false,
       "metadata": {
         "what_it_tests": "Hỏi xác nhận trước hành động ghi.",
-        "turn_type": "single"
+        "turn_type": "single",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       },
       "input": "Soạn và tạo ticket high cho lỗi Outlook trên LT-318 giúp mình.",
       "expect": {
@@ -326,7 +336,7 @@
           {
             "name": "clarify",
             "args": {
-              "question": "Bạn có xác nhận tạo ticket với tóm tắt là 'lỗi Outlook', mức ưu tiên là 'high' và asset ID là 'LT-318' không?",
+              "question": "Bạn có muốn tạo ticket với tóm tắt \"Lỗi Outlook trên LT-318\", mức độ ưu tiên cao và asset ID LT-318?",
               "response_type": "yes_no"
             }
           }
@@ -341,12 +351,12 @@
         {
           "tool": "clarify",
           "args": {
-            "question": "Bạn có xác nhận tạo ticket với tóm tắt là 'lỗi Outlook', mức ưu tiên là 'high' và asset ID là 'LT-318' không?",
+            "question": "Bạn có muốn tạo ticket với tóm tắt \"Lỗi Outlook trên LT-318\", mức độ ưu tiên cao và asset ID LT-318?",
             "response_type": "yes_no"
           },
           "result": {
             "tool": "clarify",
-            "question": "Bạn có xác nhận tạo ticket với tóm tắt là 'lỗi Outlook', mức ưu tiên là 'high' và asset ID là 'LT-318' không?",
+            "question": "Bạn có muốn tạo ticket với tóm tắt \"Lỗi Outlook trên LT-318\", mức độ ưu tiên cao và asset ID LT-318?",
             "response_type": "yes_no",
             "options": [],
             "awaiting_user": true
@@ -362,7 +372,9 @@
       "is_multiturn": true,
       "metadata": {
         "what_it_tests": "Giá trị environment mới nhất thắng.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       },
       "input": [
         {
@@ -397,8 +409,8 @@
           {
             "name": "check_service_status",
             "args": {
-              "service": "sso",
-              "environment": "staging"
+              "environment": "staging",
+              "service": "sso"
             }
           }
         ],
@@ -412,8 +424,8 @@
         {
           "tool": "check_service_status",
           "args": {
-            "service": "sso",
-            "environment": "staging"
+            "environment": "staging",
+            "service": "sso"
           },
           "result": {
             "tool": "check_service_status",
@@ -439,7 +451,9 @@
       "is_multiturn": true,
       "metadata": {
         "what_it_tests": "Carry identifier được bổ sung và giữ đúng check.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       },
       "input": [
         {
@@ -523,7 +537,9 @@
       "is_multiturn": true,
       "metadata": {
         "what_it_tests": "Cancellation mới nhất hủy action cũ.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       },
       "input": [
         {
@@ -548,7 +564,7 @@
         "routing_correct": true,
         "args_correct": true,
         "actual_tool_calls": [],
-        "actual_text": "Yêu cầu đã hủy.",
+        "actual_text": "Đã hủy yêu cầu tạo ticket.",
         "case_failure_type": "unnecessary_tool",
         "observed_mismatch": null,
         "failure_type": null,
@@ -564,12 +580,14 @@
       "is_multiturn": true,
       "metadata": {
         "what_it_tests": "Xác nhận tự nhiên gắn đúng payload hiện tại.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": "Bổ sung triệu chứng cụ thể nhưng giữ nguyên payload để kiểm tra confirmation có gắn đúng summary, asset và priority."
       },
       "input": [
         {
           "role": "user",
-          "content": "Tạo ticket lỗi Wi-Fi trên LT-240 mức medium."
+          "content": "Chuẩn bị ticket lỗi Wi-Fi chập chờn trên LT-240, mức medium."
         },
         {
           "role": "user",
@@ -600,10 +618,10 @@
           {
             "name": "create_ticket",
             "args": {
-              "summary": "lỗi Wi-Fi",
-              "priority": "medium",
               "asset_id": "LT-240",
-              "confirmed": true
+              "confirmed": true,
+              "priority": "medium",
+              "summary": "lỗi Wi-Fi chập chờn"
             }
           }
         ],
@@ -617,16 +635,16 @@
         {
           "tool": "create_ticket",
           "args": {
-            "summary": "lỗi Wi-Fi",
-            "priority": "medium",
             "asset_id": "LT-240",
-            "confirmed": true
+            "confirmed": true,
+            "priority": "medium",
+            "summary": "lỗi Wi-Fi chập chờn"
           },
           "result": {
             "tool": "create_ticket",
             "status": "created",
-            "ticket_id": "LAB-0BB8B094",
-            "path": "C:\\Users\\S88 Service\\Downloads\\K4-Day04-Lab-Starter\\starter_v0\\tickets\\LAB-0BB8B094.json"
+            "ticket_id": "LAB-2D18BC65",
+            "path": "C:\\Users\\admin\\Downloads\\K4-L3-DAY04-kingpro\\starter_v0\\tickets\\LAB-2D18BC65.json"
           }
         }
       ]
@@ -639,7 +657,9 @@
       "is_multiturn": true,
       "metadata": {
         "what_it_tests": "Không gửi identifier nội bộ ra external search.",
-        "turn_type": "multi"
+        "turn_type": "multi",
+        "owned_by": "nganduong-123",
+        "change_by_ngan": ""
       },
       "input": [
         {
@@ -673,7 +693,7 @@
           {
             "name": "clarify",
             "args": {
-              "question": "Vui lòng cung cấp tên hãng công khai và model thuần túy cho thiết bị để tìm driver.",
+              "question": "Bạn có thể cung cấp tên hãng và mô hình máy tính mà bạn cần driver không?",
               "response_type": "text"
             }
           }
@@ -688,12 +708,12 @@
         {
           "tool": "clarify",
           "args": {
-            "question": "Vui lòng cung cấp tên hãng công khai và model thuần túy cho thiết bị để tìm driver.",
+            "question": "Bạn có thể cung cấp tên hãng và mô hình máy tính mà bạn cần driver không?",
             "response_type": "text"
           },
           "result": {
             "tool": "clarify",
-            "question": "Vui lòng cung cấp tên hãng công khai và model thuần túy cho thiết bị để tìm driver.",
+            "question": "Bạn có thể cung cấp tên hãng và mô hình máy tính mà bạn cần driver không?",
             "response_type": "text",
             "options": [],
             "awaiting_user": true

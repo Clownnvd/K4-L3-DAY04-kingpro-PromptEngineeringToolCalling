@@ -105,7 +105,6 @@ def run_model_tool_loop(
     working_messages = list(messages)
     rounds: list[dict[str, Any]] = []
     all_tool_events: list[dict[str, Any]] = []
-    total_usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
 
     current_user_text = latest_user_text(working_messages)
     if SENSITIVE_INPUT.search(current_user_text):
@@ -124,15 +123,12 @@ def run_model_tool_loop(
 
     for round_index in range(1, max_tool_rounds + 1):
         response = provider.complete(working_messages, tools, model=model, temperature=0.0)
-        for key in total_usage:
-            total_usage[key] += int(response.usage.get(key, 0) or 0)
         calls = response.tool_calls
         round_record: dict[str, Any] = {
             "round": round_index,
             "assistant_text": response.text,
             "tool_calls": [{"name": call.name, "args": call.args} for call in calls],
             "tool_results": [],
-            "usage": response.usage,
         }
 
         if not calls:
@@ -142,7 +138,6 @@ def run_model_tool_loop(
                 "assistant_text": response.text or "",
                 "rounds": rounds,
                 "tool_events": all_tool_events,
-                "usage": total_usage,
             }
 
         working_messages.append(assistant_tool_message(response.text, calls))
@@ -165,7 +160,6 @@ def run_model_tool_loop(
                     "assistant_text": question,
                     "rounds": rounds,
                     "tool_events": all_tool_events,
-                    "usage": total_usage,
                 }
 
             non_clarification_events.append(event)
@@ -178,7 +172,6 @@ def run_model_tool_loop(
         "assistant_text": f"Stopped after {max_tool_rounds} tool rounds. Inspect the transcript for details.",
         "rounds": rounds,
         "tool_events": all_tool_events,
-        "usage": total_usage,
     }
 
 
