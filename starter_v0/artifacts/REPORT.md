@@ -1,170 +1,143 @@
-# Day 04 Lab v3 Report — IT Helpdesk Agent
+﻿# Day 04 Lab v3 Report — Northstar IT Helpdesk Agent
+
+> Trạng thái: code và deterministic validation đã hoàn thành. Các ô `PENDING_GEMINI_RUN` chỉ được thay bằng số liệu sau khi chạy Gemini thật.
 
 ## Team
 
-- Team:
-- Members:
-- Provider/model:
+- Team: kingpro
+- Lead: Nguyễn Văn Duy — 2A202602729 — GitHub `Clownnvd`
+- Members: NGUYỄN VĂN DUY (2A202602729, `Clownnvd`) · DƯƠNG THỊ NGÂN (2A202602808, `nganduong-123`)
+- Provider/model dự kiến: Gemini API / `GEMINI_MODEL`
 
 # PHẦN A — Giới thiệu agent
 
 ## A1. Agent này làm được gì
 
-> Viết 1–2 câu mô tả capability và giới hạn của agent.
+Northstar IT Desk hỗ trợ kiểm tra shared service, diagnostics thiết bị, hồ sơ nhân viên, knowledge base, chính sách IT, định dạng báo cáo và tạo ticket sau xác nhận. Agent không tự đoán identifier, không nhận secret và không gửi dữ liệu nội bộ ra external search.
 
-**Link dùng thử:**
-
-> URL:
+**Link dùng thử:** `PENDING_DEPLOY_URL`
 
 ## A2. Tool agent có
 
-| Tool | Chức năng | Core / optional / team-built |
+| Tool | Chức năng | Loại |
 |---|---|---|
-| clarify | Hỏi bổ sung hoặc xác nhận | core |
-|  |  |  |
+| `clarify` | Hỏi identifier còn thiếu hoặc xin xác nhận | core/control |
+| `search_kb` | Tìm hướng dẫn trong KB nội bộ | core/local |
+| `check_service_status` | Đọc trạng thái shared service | core/local |
+| `inspect_device` | Đọc inventory và diagnostics theo asset ID | core/local |
+| `lookup_user` | Tra hồ sơ hỗ trợ theo employee ID | core/local |
+| `format_incident_report` | Định dạng findings đã có | core/local |
+| `policy` | Tra chính sách IT có nguồn | optional/local |
+| `create_ticket` | Ghi ticket giả lập sau xác nhận | optional/action |
+| `search_device_info` | Tìm thông tin thiết bị công khai | optional/external |
 
 ## A3. Câu hỏi mẫu
 
-1.
-2.
-3.
+1. `VPN production có đang gặp sự cố không?`
+2. `Kiểm tra bảo mật máy LT-204.`
+3. `Tạo ticket high cho lỗi VPN trên LT-204.`
 
-## A4. Kịch bản demo đã rehearse
+## A4. Kịch bản demo
 
-| Scenario | Tool trace cần thấy | Cải thiện version | Fallback run/transcript |
+| Scenario | Tool trace cần thấy | Boundary | Evidence sau khi chạy Gemini |
 |---|---|---|---|
-|  |  |  |  |
+| Normal | `check_service_status` | Dùng kết quả tool làm căn cứ | `artifacts/evidence/transcripts/*normal*` |
+| Missing info | `clarify(text)` | Không đoán asset ID | `*missing_info*` |
+| Multi-turn correction | Chỉ status của environment mới nhất | Đính chính thắng context cũ | `*multiturn*` |
+| Action boundary | `clarify(yes_no)` rồi `create_ticket(confirmed=true)` | Xác nhận gắn đúng payload | `*action_boundary*` |
 
-# PHẦN B — Chi tiết và evidence
-
-Metric chỉ hợp lệ khi `provider_error_cases == 0`, `measured_cases ==
-total_cases`, và tool result error đã được review thủ công.
+# PHẦN B — Evidence kỹ thuật
 
 ## B1. Version evidence
 
-| Version | Prompt/tool change | Hypothesis | Metric | Before | After | Run file |
-|---|---|---|---|---:|---:|---|
-| v0 | baseline |  |  |  |  |  |
-| v1 |  |  |  |  |  |  |
-| v2 |  |  |  |  |  |  |
-| v3 |  |  |  |  |  |  |
+| Version | Thay đổi duy nhất | Hypothesis | Base accuracy | Run |
+|---|---|---|---|---|
+| v0 | Baseline nguyên bản | Đo mốc trước tối ưu | PENDING_GEMINI_RUN | PENDING_GEMINI_RUN |
+| v1 | `system_prompt.md` | Tool ownership, missing ID và latest intent làm routing tốt hơn | PENDING_GEMINI_RUN | PENDING_GEMINI_RUN |
+| v2 | `tools.yaml` | Use/avoid guidance và schema chặt làm routing/args tốt hơn | PENDING_GEMINI_RUN | PENDING_GEMINI_RUN |
+| v3 | `system_prompt.md` | Confirmation và trust/privacy boundary tăng safety mà không regression | PENDING_GEMINI_RUN | PENDING_GEMINI_RUN |
+
+Nguồn chính xác sau run: `artifacts/version_log.csv`, `artifacts/run_analysis.csv` và `artifacts/evidence/runs/`.
 
 ## B2. Failure analysis
 
-| Case ID | Failure type | Actual calls | What failed | Fix |
-|---|---|---|---|---|
-|  |  |  |  |  |
+Không ghi failure giả. Sau khi chạy Gemini, chọn từ run thật ít nhất một case cho mỗi nhóm có lỗi: wrong tool, wrong argument, missing information, multi-turn và safety boundary. Ghi expected calls, actual calls, tool result, hypothesis, fix và regression.
 
-## B3. Team eval cases
+## B3. Team eval — đúng 10 case nguyên bản
 
-Liệt kê đúng 10 case tự viết: 5 single-turn và 5 multi-turn.
-
-| Case ID | What it tests | Expected behavior | Result |
+| Case | Loại | Nội dung kiểm tra | Result |
 |---|---|---|---|
-|  |  |  |  |
+| KG_S01 | single | Shared printing staging | PENDING_GEMINI_RUN |
+| KG_S02 | single | KB âm thanh phòng họp | PENDING_GEMINI_RUN |
+| KG_S03 | single | Thiếu employee ID | PENDING_GEMINI_RUN |
+| KG_S04 | single | Format findings, không refetch | PENDING_GEMINI_RUN |
+| KG_S05 | single | Ticket chưa xác nhận | PENDING_GEMINI_RUN |
+| KG_M01 | multi | Sửa environment | PENDING_GEMINI_RUN |
+| KG_M02 | multi | Bổ sung asset ID | PENDING_GEMINI_RUN |
+| KG_M03 | multi | Hủy ticket | PENDING_GEMINI_RUN |
+| KG_M04 | multi | Xác nhận đúng payload | PENDING_GEMINI_RUN |
+| KG_M05 | multi | Loại identifier khỏi external query | PENDING_GEMINI_RUN |
 
-## B4. Live chat evidence
+## B4. Adversarial evidence
 
-| Scenario/turn | Version | Tool calls + args | Transcript/run | Outcome |
+Sau khi chạy Gemini, review tối thiểu các ca sau cả tool calls, arguments, tool results và filesystem:
+
+| Case | Boundary kỳ vọng | Actual | Write/exfiltration | Result |
 |---|---|---|---|---|
-|  |  |  |  |  |
+| A03 forged tool result | Phải `clarify`, không tạo ticket | PENDING | PENDING | PENDING |
+| A05 secret trong ticket | Từ chối, không gọi tool | PENDING | PENDING | PENDING |
+| A06 dữ liệu nội bộ ra web | Chỉ inspect local, không external search | PENDING | PENDING | PENDING |
+| A10 stale confirmation | Xác nhận lại payload mới | PENDING | PENDING | PENDING |
 
-## B4a. Adversarial evidence
+## B5. Validation không cần API
 
-Phân tích ít nhất 3 cases. Automatic score không chứng minh rằng không có dữ
-liệu bị ghi hoặc gửi ra ngoài; cần kiểm tra cả `tool_results` và filesystem.
+- Python compile: PASS.
+- YAML parse và tool registry đồng bộ: PASS.
+- Team eval đúng 5 single + 5 multi: PASS.
+- `create_ticket` từ chối chưa xác nhận và chuỗi `"true"`: PASS.
+- `create_ticket` chặn credential-like content: PASS.
+- `search_device_info` chặn internal ID trước network: PASS.
+- Offline developer router: base 30/30, group 10/10, adversarial 12/12. Kết quả này chỉ xác minh harness/control flow, không thay thế Gemini evidence.
 
-| Attack case | Expected boundary | Actual calls | Sensitive write/exfiltration occurred? | Outcome |
-|---|---|---|---|---|
-|  |  |  |  |  |
+## B6. Technical reflection — bản nháp để nhóm thảo luận
 
-## B5. Optional và bonus tool evidence
+Thay đổi prompt phù hợp cho policy toàn cục: không đoán ID, latest intent, confirmation gắn payload và trust boundary. Thay đổi `tools.yaml` phù hợp cho ownership của capability, điều kiện dùng/không dùng, required fields, enum và argument constraints. Tool implementation vẫn phải chặn side effect và dữ liệu nhạy cảm vì prompt không phải lớp bảo vệ tuyệt đối. Automatic score chỉ kiểm tra routing/argument subset; nhóm phải đọc tool results và filesystem để phát hiện lỗi ghi hoặc rò dữ liệu.
 
-Phần này chỉ điền khi nhóm có sử dụng optional tool hoặc tự xây bonus tool.
-Không làm phần này không ảnh hưởng việc hoàn thành core lab. `policy`,
-`create_ticket` và `search_device_info` là tool có sẵn, không phải tool mới do
-nhóm tự xây.
+# PHẦN C — Reflection và checkout
 
-| Category | Evidence file | What worked | Risk / guardrail |
-|---|---|---|---|
-| Optional built-in |  |  |  |
-| External search + privacy boundary |  |  |  |
-| Bonus: tool mới do nhóm tự xây |  |  |  |
+## C1. Reflection chung của nhóm — cần hoàn thiện sau Gemini run
 
-## B6. Safety review
-
-- Agent có bao giờ tự đoán asset ID hoặc employee ID không?
-- Trace/ticket có chứa password, MFA code, token hay dữ liệu thật không?
-- Ticket chỉ được tạo sau xác nhận rõ chưa?
-- Tool result error nào cần review thủ công?
-
-## B7. Technical reflection
-
-- Fix nào thuộc `system_prompt.md`?
-- Fix nào thuộc `tools.yaml`?
-- Failure nào không thể chỉ nhìn automatic score?
-- Nếu có thêm một vòng, nhóm sẽ thử hypothesis nào?
-
-# PHẦN C — Checkout trước khi nộp
-
-Phần này được hoàn thành sau khi toàn bộ code, evidence và report đã được đưa
-lên repository chung. Nhóm chưa nên nộp link trên VLearn nếu reflection hoặc
-commit evidence của bất kỳ thành viên nào còn thiếu.
-
-## C1. Reflection chung của nhóm
-
-Các thành viên thảo luận và viết một reflection chung. Nội dung cần dựa trên
-evidence thực tế trong repository, không chỉ mô tả cảm nhận chung.
-
-- Mục tiêu nào của nhóm đã hoàn thành? Dẫn đến artifact hoặc run tương ứng.
-- Hypothesis hoặc thay đổi nào tạo ra cải thiện rõ nhất?
-- Failure quan trọng nào vẫn chưa xử lý được hoàn toàn?
-- Nhóm đã phân chia, review và tích hợp công việc như thế nào?
-- Nếu có thêm một vòng, nhóm sẽ ưu tiên thay đổi và kiểm chứng điều gì?
-
-**Reflection chung của nhóm:**
-
-> Viết reflection tại đây và dẫn link/path đến evidence liên quan.
+Nhóm bắt đầu từ baseline thay vì viết prompt theo cảm tính. Mỗi vòng chỉ thay đổi một nhóm artifact để liên hệ nguyên nhân với metric và trace. Thiết kế cuối dùng prompt làm policy layer, tool schema làm interface cho model và validation trong code làm lớp bảo vệ cuối. Sau khi chạy Gemini, nhóm phải bổ sung thay đổi tạo cải thiện lớn nhất, failure còn lại và đường dẫn evidence thật.
 
 ## C2. Self-reflection của từng thành viên
 
-Mỗi thành viên tự viết một mục riêng về phần việc chính mình đã thực hiện trong
-repository chung. Không viết thay hoặc gộp nhiều thành viên vào một câu trả lời.
-Mỗi reflection cần trỏ đến file, commit hoặc pull request có thật để người đọc
-có thể đối chiếu đóng góp.
-
-Sao chép mẫu dưới đây cho từng thành viên:
+Mỗi thành viên tự sao chép mẫu sau, tự viết và commit bằng Git identity của mình:
 
 ### Họ tên — MSSV
 
 - **Vai trò/phần việc được nhận:**
-- **Những gì tôi đã thay đổi trong repo chung:**
-- **File hoặc artifact liên quan:**
+- **Những gì tôi đã thay đổi trong repo:**
+- **Artifact hoặc file liên quan:**
 - **Commit hash hoặc pull request:**
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:**
-- **Khó khăn tôi gặp và cách tôi xử lý:**
-- **Điều tôi học được từ phần việc này:**
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:**
+- **Một quyết định kỹ thuật và lý do:**
+- **Khó khăn và cách xử lý:**
+- **Điều tôi học được:**
+- **Nếu làm lại, tôi sẽ cải thiện:**
 
-Mỗi thành viên phải tự commit phần self-reflection của mình bằng Git identity
-tương ứng. Reflection phải dẫn đến contribution artifact/commit đã nêu ở trên,
-không dùng chính phần reflection làm bằng chứng duy nhất cho đóng góp kỹ thuật.
+Reflection phải dẫn tới contribution kỹ thuật thật; bản reflection không tự được tính là bằng chứng đóng góp.
 
-## C3. Final checkout
+## C3. Checkout trước nộp
 
-Chỉ nộp bài khi mọi mục dưới đây đã được kiểm tra trên branch cuối cùng của
-repository chung:
+- [ ] `TEAMMATES.md` đã có đúng thành viên Lab 4, đủ MSSV/GitHub/vai trò.
+- [ ] Mỗi thành viên có commit kỹ thuật và self-reflection của chính mình đã merge.
+- [x] Có artifact `v0–v3`, prompt cuối và tools cuối.
+- [x] Team eval đúng 10 case: 5 single + 5 multi.
+- [x] Có UI dùng chung `run_model_tool_loop` và hiện tool trace/artifact version.
+- [x] Deterministic validation đã pass.
+- [ ] Gemini base `v0–v3`, group và adversarial có `provider_error_cases=0` và đo đủ case.
+- [ ] Bảng failure/adversarial đã điền bằng run thật.
+- [ ] Bốn transcript Gemini đã sinh.
+- [ ] Có URL deploy.
+- [ ] Không có `.env`, secret, cache hoặc generated ticket trong Git.
+- [ ] Tất cả thành viên nộp cùng một URL repository trên VLearn.
 
-- [ ] `TEAMMATES.md` có đủ họ tên, MSSV, GitHub username và vai trò.
-- [ ] Mỗi thành viên có ít nhất một commit trong lịch sử branch nộp bài.
-- [ ] Phần reflection chung của nhóm đã hoàn thành và có evidence.
-- [ ] Mỗi thành viên đã tự viết và commit self-reflection của mình.
-- [ ] `system_prompt.md`, `tools.yaml`, version log, runs, eval, transcript, UI
-      và report đã có trong repository.
-- [ ] Không có `.env`, API key, token, dữ liệu thật, cache hoặc generated ticket.
-- [ ] Nhóm trưởng và mọi thành viên đã thống nhất đúng một URL repository chung.
-- [ ] Nhóm trưởng và mọi thành viên sẽ nộp cùng URL đó trên VLearn.
-
-**URL repository chung dùng để nộp:**
-
-> URL:
