@@ -23,6 +23,23 @@ def now_iso() -> str:
     return datetime.now().isoformat(timespec="seconds")
 
 
+SENSITIVE_INPUT = re.compile(
+    r"\b(?:password|passwd|token|api[ _-]?key|mfa|otp|recovery[ _-]?code)\s*[:=]\s*\S+",
+    re.IGNORECASE,
+)
+
+
+def redact_sensitive_text(text: str) -> str:
+    return SENSITIVE_INPUT.sub("[REDACTED_SECRET]", text)
+
+
+def latest_user_text(messages: list[dict[str, str]]) -> str:
+    for message in reversed(messages):
+        if message.get("role") == "user":
+            return message.get("content", "")
+    return ""
+
+
 def safe_slug(value: str) -> str:
     slug = re.sub(r"[^A-Za-z0-9_.-]+", "_", value.strip())
     return slug.strip("_") or "run"
@@ -88,15 +105,34 @@ def run_model_tool_loop(
     working_messages = list(messages)
     rounds: list[dict[str, Any]] = []
     all_tool_events: list[dict[str, Any]] = []
+    total_usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+
+    current_user_text = latest_user_text(working_messages)
+    if SENSITIVE_INPUT.search(current_user_text):
+        safe_response = {
+            "intent": "sensitive_data",
+            "action": "refused",
+            "reply": "Không thể xử lý hoặc lưu bí mật. Hãy thu hồi hoặc thay đổi thông tin vừa chia sẻ.",
+            "evidence_ids": [],
+        }
+        return {
+            "status": "blocked_sensitive_input",
+            "assistant_text": json.dumps(safe_response, ensure_ascii=False),
+            "rounds": [],
+            "tool_events": [],
+        }
 
     for round_index in range(1, max_tool_rounds + 1):
         response = provider.complete(working_messages, tools, model=model, temperature=0.0)
+        for key in total_usage:
+            total_usage[key] += int(response.usage.get(key, 0) or 0)
         calls = response.tool_calls
         round_record: dict[str, Any] = {
             "round": round_index,
             "assistant_text": response.text,
             "tool_calls": [{"name": call.name, "args": call.args} for call in calls],
             "tool_results": [],
+            "usage": response.usage,
         }
 
         if not calls:
@@ -106,6 +142,7 @@ def run_model_tool_loop(
                 "assistant_text": response.text or "",
                 "rounds": rounds,
                 "tool_events": all_tool_events,
+                "usage": total_usage,
             }
 
         working_messages.append(assistant_tool_message(response.text, calls))
@@ -128,6 +165,7 @@ def run_model_tool_loop(
                     "assistant_text": question,
                     "rounds": rounds,
                     "tool_events": all_tool_events,
+                    "usage": total_usage,
                 }
 
             non_clarification_events.append(event)
@@ -140,6 +178,7 @@ def run_model_tool_loop(
         "assistant_text": f"Stopped after {max_tool_rounds} tool rounds. Inspect the transcript for details.",
         "rounds": rounds,
         "tool_events": all_tool_events,
+        "usage": total_usage,
     }
 
 
@@ -151,7 +190,7 @@ def write_transcript(path: Path, transcript: dict[str, Any]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Interactive IT Helpdesk Agent chat with transcript logging.")
-    parser.add_argument("--provider", choices=["openrouter", "openai", "anthropic", "gemini"], required=True)
+    parser.add_argument("--provider", choices=["openrouter", "openai", "anthropic", "gemini", "groq", "offline"], required=True)
     parser.add_argument("--model", default=None)
     parser.add_argument("--version", required=True, help="Student-chosen artifact version label, e.g. v0, v1, v2.")
     parser.add_argument("--system-prompt", type=Path, default=ARTIFACTS_DIR / "system_prompt.md")
@@ -216,7 +255,7 @@ def main() -> None:
         turn_record: dict[str, Any] = {
             "turn_index": turn_index,
             "started_at": now_iso(),
-            "user": user_text,
+            "user": redact_sensitive_text(user_text),
             "status": "started",
             "assistant_text": None,
             "rounds": [],
