@@ -1,0 +1,104 @@
+{
+  "scenario": "normal",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "version": "v3",
+  "artifact_version": "v3+p596719b51b1c+t057bc9b3211b",
+  "prompt_hash": "596719b51b1cf8de30b4f53e344736a507f2c2bbc82cbc850977a4a13abf09b2",
+  "tools_hash": "057bc9b3211b268068a68918cf376edb0f91770c81e7a6a1ea1f72c8635e31cb",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "VPN production hiện có đang gặp sự cố không?",
+      "status": "answered",
+      "assistant_text": "Trạng thái VPN trong môi trường production hiện đang gặp sự cố với tình trạng \"degraded\". Có sự cố về xác thực không ổn định cho một số máy khách Windows. \n\n- **Sự cố bắt đầu:** 14/09/2026, 07:35\n- **Cập nhật lần cuối:** 14/09/2026, 08:50\n- **Vị trí bị ảnh hưởng:** Bangkok, Remote\n- **Giải pháp tạm thời:** Thử lại sau khi đồng bộ hóa đồng hồ thiết bị.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ, hãy cho biết!",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "check_service_status",
+              "args": {
+                "service": "vpn",
+                "environment": "production"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "check_service_status",
+              "args": {
+                "service": "vpn",
+                "environment": "production"
+              },
+              "result": {
+                "tool": "check_service_status",
+                "service": "vpn",
+                "environment": "production",
+                "status": "degraded",
+                "incident": "Intermittent authentication failures for some Windows clients",
+                "incident_id": "INC-1042",
+                "affected_locations": [
+                  "Bangkok",
+                  "Remote"
+                ],
+                "started_at": "2026-09-14T07:35:00+07:00",
+                "last_updated": "2026-09-14T08:50:00+07:00",
+                "workaround": "Retry once after synchronizing the device clock",
+                "checked_at": "2026-09-14T09:00:00+07:00"
+              }
+            }
+          ],
+          "usage": {
+            "input_tokens": 3249,
+            "output_tokens": 19,
+            "total_tokens": 3268
+          }
+        },
+        {
+          "round": 2,
+          "assistant_text": "Trạng thái VPN trong môi trường production hiện đang gặp sự cố với tình trạng \"degraded\". Có sự cố về xác thực không ổn định cho một số máy khách Windows. \n\n- **Sự cố bắt đầu:** 14/09/2026, 07:35\n- **Cập nhật lần cuối:** 14/09/2026, 08:50\n- **Vị trí bị ảnh hưởng:** Bangkok, Remote\n- **Giải pháp tạm thời:** Thử lại sau khi đồng bộ hóa đồng hồ thiết bị.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ, hãy cho biết!",
+          "tool_calls": [],
+          "tool_results": [],
+          "usage": {
+            "input_tokens": 3552,
+            "output_tokens": 130,
+            "total_tokens": 3682
+          }
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "check_service_status",
+          "args": {
+            "service": "vpn",
+            "environment": "production"
+          },
+          "result": {
+            "tool": "check_service_status",
+            "service": "vpn",
+            "environment": "production",
+            "status": "degraded",
+            "incident": "Intermittent authentication failures for some Windows clients",
+            "incident_id": "INC-1042",
+            "affected_locations": [
+              "Bangkok",
+              "Remote"
+            ],
+            "started_at": "2026-09-14T07:35:00+07:00",
+            "last_updated": "2026-09-14T08:50:00+07:00",
+            "workaround": "Retry once after synchronizing the device clock",
+            "checked_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ],
+      "usage": {
+        "input_tokens": 6801,
+        "output_tokens": 149,
+        "total_tokens": 6950
+      }
+    }
+  ],
+  "generated_at": "2026-09-15T20:27:15"
+}

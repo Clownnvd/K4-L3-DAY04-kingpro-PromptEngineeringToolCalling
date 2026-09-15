@@ -41,25 +41,30 @@ def main() -> None:
     check(len(ids)==len(set(ids)),"Team eval IDs are unique",errors)
 
     versions=artifacts/"versions"
-    for version in ["v0","v1","v2","v3"]:
+    for version in ["v0","v1","v2","v3","v4"]:
         check((versions/version/"system_prompt.md").exists(),f"{version} prompt snapshot exists",errors)
         check((versions/version/"tools.yaml").exists(),f"{version} tools snapshot exists",errors)
         yaml.safe_load((versions/version/"tools.yaml").read_text(encoding="utf-8"))
     check((versions/"v0"/"system_prompt.md").read_bytes() != (versions/"v1"/"system_prompt.md").read_bytes(),"v1 changes the prompt",errors)
     check((versions/"v1"/"tools.yaml").read_bytes() != (versions/"v2"/"tools.yaml").read_bytes(),"v2 changes tool declarations",errors)
     check((versions/"v2"/"system_prompt.md").read_bytes() != (versions/"v3"/"system_prompt.md").read_bytes(),"v3 changes the prompt",errors)
+    check((versions/"v3"/"system_prompt.md").read_bytes() == (versions/"v4"/"system_prompt.md").read_bytes(),"v4 keeps the v3 prompt fixed",errors)
+    check((versions/"v3"/"tools.yaml").read_bytes() != (versions/"v4"/"tools.yaml").read_bytes(),"v4 changes only tool declarations",errors)
 
     # Deterministic action/privacy guardrails.
     from tools.create_ticket.tool import create_ticket
     from tools.search_device_info.tool import search_device_info
+    from tools.check_public_status.tool import check_public_status
     no_confirm=create_ticket("VPN mock incident","high","LT-204",False)
     string_confirm=create_ticket("VPN mock incident","high","LT-204","true")
     secret=create_ticket("password=ExampleOnly123","high","LT-204",True)
     external=search_device_info("Lenovo","ThinkPad T14 Gen 4 LT-204","drivers",1)
+    unsupported_status=check_public_status("arbitrary-url")
     check(no_confirm.get("status")=="needs_confirmation","Ticket write requires confirmation",errors)
     check(string_confirm.get("status")=="needs_confirmation","String true is not accepted as confirmation",errors)
     check(secret.get("error")=="restricted_sensitive_data","Ticket rejects credential-like content",errors)
     check(external.get("error")=="restricted_internal_identifier","External search rejects internal IDs before network",errors)
+    check(unsupported_status.get("error")=="unsupported_provider","Public status tool rejects non-allowlisted targets",errors)
 
     prompt=(artifacts/"system_prompt.md").read_text(encoding="utf-8")
     for marker in ["## Identity","## Decision rules","## Clarification and context","## Action confirmation","## Safety boundaries","## Output contract"]:

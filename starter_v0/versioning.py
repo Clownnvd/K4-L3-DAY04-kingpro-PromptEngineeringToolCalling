@@ -14,7 +14,14 @@ class ArtifactVersion:
 
 
 def file_hash(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    raw = path.read_bytes()
+    try:
+        # Artifact hashes must stay stable across Windows CRLF and Unix LF clones.
+        text = raw.decode("utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
+        raw = text.encode("utf-8")
+    except UnicodeDecodeError:
+        pass
+    return hashlib.sha256(raw).hexdigest()
 
 
 def short_hash(value: str, length: int = 12) -> str:
